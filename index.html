@@ -1,1 +1,39 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#171713"><meta name="description" content="历史人格镜像 1.0 24人物十八关内测版 v0.7"><title>历史人格镜像 · 二十四镜十八关</title><link rel="stylesheet" href="style-1.css"><link rel="stylesheet" href="style-2.css"><link rel="stylesheet" href="style-3.css"><link rel="stylesheet" href="style-4.css"><link rel="stylesheet" href="style-5.css"></head><body><div class="grain"></div><main class="app-shell" id="app"></main><div class="file-note" id="fileNote"><button onclick="this.parentNode.remove()">知道了</button>当前是本地单文件模式。电脑可直接运行；手机聊天软件的文件预览器可能禁止 JavaScript，正式传播请部署成 HTTPS 网页链接后再分享。</div><script src="data-base.js"></script><script src="data-core-1.js"></script><script src="data-core-2.js"></script><script src="data-dynamic-1.js"></script><script src="data-dynamic-2.js"></script><script src="data-dynamic-3.js"></script><script src="data-dynamic-4.js"></script><script src="data-characters-1.js"></script><script src="data-characters-2.js"></script><script src="data-characters-3.js"></script><script src="data-characters-4.js"></script><script src="data-characters-5.js"></script><script src="data-characters-6.js"></script><script src="data-characters-7.js"></script><script src="data-characters-8.js"></script><script src="app-1.js"></script><script src="app-2.js"></script><script src="app-3.js"></script><script src="app-4.js"></script><script src="app-5.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#efe6d4">
+<title>历史人格镜像 · Beta 1.2</title>
+<style>
+html,body{margin:0;min-height:100%;background:#efe6d4;color:#24211b;font-family:"Noto Serif SC","Songti SC",serif}body{display:grid;place-items:center}.boot{width:min(88vw,520px);text-align:center;padding:48px 20px}.seal{width:52px;height:52px;margin:0 auto 24px;border:1px solid #9c2f24;display:grid;place-items:center;color:#9c2f24;font-size:21px}.title{font-size:28px;letter-spacing:.12em;margin:0 0 15px}.note{opacity:.62;line-height:1.8;font-size:14px}.bar{height:1px;background:rgba(36,33,27,.18);margin:28px 0;overflow:hidden}.bar:after{content:"";display:block;height:100%;width:36%;background:#9c2f24;animation:move 1.15s ease-in-out infinite}@keyframes move{0%{transform:translateX(-110%)}100%{transform:translateX(390%)}}.error{color:#84291f;white-space:pre-line}
+</style>
+</head>
+<body>
+<div class="boot" id="boot"><div class="seal">镜</div><h1 class="title">历史人格镜像</h1><div class="bar"></div><p class="note">正在展开 Beta 1.2……</p></div>
+<script>
+(async()=>{
+ const boot=document.getElementById('boot');
+ const files=['part-01.b64','part-02a.b64','part-02b.b64','part-02c.b64','part-02d.b64','part-03.b64','part-04.b64','part-05.b64','part-06.b64','part-07.b64','part-08.b64','part-09.b64','part-10.b64'];
+ try{
+  if(!('DecompressionStream' in window)) throw new Error('当前浏览器版本较旧，暂不支持页面解包。请使用最新版 Safari、Chrome 或 Edge 打开。');
+  const chunks=await Promise.all(files.map(async f=>{
+   const r=await fetch('./archive/'+f,{cache:'no-store'});
+   if(!r.ok) throw new Error('载入 '+f+' 失败（'+r.status+'）');
+   return (await r.text()).trim();
+  }));
+  const binary=atob(chunks.join(''));
+  const bytes=new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
+  const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+  const html=await new Response(stream).text();
+  if(!html.includes('<!doctype html')&&!html.includes('<!DOCTYPE html')) throw new Error('Beta 1.2 归档校验失败。');
+  document.open();document.write(html);document.close();
+ }catch(err){
+  console.error(err);
+  boot.innerHTML='<div class="seal">镜</div><h1 class="title">载入未完成</h1><p class="note error">'+String(err.message||err)+'</p><p class="note">请刷新页面重试；若仍失败，请在最新版系统浏览器中打开。</p>';
+ }
+})();
+</script>
+</body>
+</html>
